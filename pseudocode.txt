@@ -1,0 +1,41 @@
+1. get board
+  1.1: take board as input (list of letters)
+  1.2: generate random board
+  note: make it a square matrix of size n
+
+2. given a starting position, find each of the 8 adjacent letters
+  - check for edges
+    - if i < boardSize, you can't go up
+    - if i >= (boardSize^2 - boardSize), you can't go down
+    - if (i % boardSize) == 0, you can't go left
+    - if (i % boardSize) == (boardSize - 1), can't go right
+  - left = i-1, right = i+1
+  - down = (i + boardSize), up = (i - boardSize)
+
+3. traverse the board and construct a string of adjacent letters
+  - if you get an empty string, don't add it, and stop looking in that direction
+  - don't visit the same index twice
+  - stop if every adjacent letter is already visisted
+  - baby mode: stop after grabbing x letters
+  - naive mode: keep going until visiting every letter on the board
+  - fancy mode: stop if nothing in the dictionary starts with the current sequence of letters
+  - double fancy mode: memoize substrings that are and aren't words
+
+4. if string is at least minLength, check whether the string is in the dictionary
+  4.1  import a dictionary as a list of words
+  4.2  use a list method to check
+  4.3  if yes, add string to a list of solutions
+
+5. tally up points for all solutions
+  - boggle points: 
+  - spelling bee points: 1 for 4 letter words, points=letters after that
+
+6. print board for the player (formatted as square)
+
+7. take a command to print number of solutions, list of solutions, number of solutions by word length, max points, etc
+
+8. interactive version!! take guesses as text input, check them against the solution list, track a list of words found
+
+
+enhancements
+- squaredle-style hints, e.g. replace a letter with a dash when all solutions using it have been guessed, print a censored list of solutions sorted by length and alphabetically ordered
