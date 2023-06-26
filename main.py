@@ -33,6 +33,14 @@ def isValidBoard(board):
                 return False
     return True
 
+def isValidWord(word):
+    minLen = 4
+    maxLen = 4
+    if len(word) >= minLen and len(word) <= maxLen:
+        return True
+    else:
+        return False
+
 # Returns a tuple (i, j) with new indices
 def goLeft(i, j):
     if j < 1:
@@ -134,6 +142,19 @@ def goAdjacent(direction, board, starti, startj):
    
     return (i, j)
 
+def addToWord(word, direction, board, i, j, maxLen):
+    words = []
+    next = True #initialize for the loop
+    while next and len(word) <= maxLen: #next will be False if at the edge of board
+        next = goAdjacent(direction, board, i, j)
+        if next:
+            i, j = next
+        word += board[i][j]
+        # if isValidWord(word):
+        words.append(word)
+    return words
+
+
 def makeWords(board, starti, startj):
     minLen = 4
     maxLen = 4
@@ -142,20 +163,15 @@ def makeWords(board, starti, startj):
                   "downLeft", "down", "downRight"]
     i = starti
     j = startj
-    words = []
-    word = ""
-    while len(word) < minLen:
-        for d in directions:
-            word = board[i][j]
-            next = goAdjacent(d, board, i, j)
-            if next: #will be False if at the edge of board
-                word += next
-            # else:
-            #     continue
-
-
-
-    return words
+    possibleWords = [] #includes non real words
+    word = board[i][j]
+    for d in directions:
+        possibleWords += addToWord(word, d, board, i, j, maxLen)
+        # i, j = goAdjacent(d, board, i, j) - no this is the wrong timing
+        # get the last possible word returned and remove its last letter then try the other directions
+        # but rn we dont have a way to get the i,j of the last letter
+        # possibleWords += addToWord(word, d, board, i, j, maxLen)
+    return possibleWords
         
 #######
 
@@ -165,13 +181,6 @@ def test(size):
     i = 1
     j = 1
     print(b[i][j])
-    print(goAdjacent("upLeft", b, i, j))
-    print(goAdjacent("up", b, i, j))
-    print(goAdjacent("upRight", b, i, j))
-    print(goAdjacent("left", b, i, j))
-    print(goAdjacent("right", b, i, j))
-    print(goAdjacent("downLeft", b, i, j))
-    print(goAdjacent("down", b, i, j))
-    print(goAdjacent("downRight", b, i, j))
+    print(makeWords(b, 3, 3))
 
-test(3)
+test(5)
