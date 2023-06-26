@@ -34,68 +34,119 @@ def isValidBoard(board):
     return True
 
 # Returns a tuple (i, j) with new indices
-def goLeft(size, i, j):
+def goLeft(i, j):
     if j < 1:
         return False
     else:
         return (i, j-1)
 
-def goRight(size, i, j):
+def goRight(i, j, size):
     if j >= (size - 1):
         return False
     else:
         return (i, j+1)
 
-def goUp(size, i, j):
+def goUp(i, j):
     if i < 1:
         return False
     else:
         return (i-1, j)
 
-def goDown(size, i, j):
+def goDown(i, j, size):
     if i >= (size - 1):
         return False
     else:
         return (i+1, j)
 
 # Returns next letter in a certain direction, or empty string if direction is invalid
-def goAdj(direction, board, starti, startj): 
+def goAdjacent(direction, board, starti, startj): 
     size = len(board)
     i = starti
     j = startj
     if direction=="upLeft":
-        next = goUp(size, i, j)
-        if next:
+        next = goUp(i, j)
+        if next: #next will be False if already at top edge
             (i, j) = next
-            left = goLeft(size, i, j)
-            if left:
+            left = goLeft(i, j)
+            if left: #left will be False if already at left edge
                 (i, j) = left
             else:
                 return ""
         else: 
             return ""
     if direction=="up":
-        next = goUp(size, i, j)
+        next = goUp(i, j)
         if next:
             (i, j) = next
+        else: 
+            return ""
+    if direction=="upRight":
+        next = goUp(i, j)
+        if next:
+            (i, j) = next
+            right = goRight(i, j, size)
+            if right: 
+                (i, j) = right
+            else:
+                return ""
+        else: 
+            return ""
+    if direction=="left":
+        next = goLeft(i, j)
+        if next:
+            (i, j) = next
+        else: 
+            return ""
+    if direction=="right":
+        next = goRight(i, j, size)
+        if next:
+            (i, j) = next
+        else: 
+            return ""
+    if direction=="downLeft":
+        next = goDown(i, j, size)
+        if next: 
+            (i, j) = next
+            left = goLeft(i, j)
+            if left: 
+                (i, j) = left
+            else:
+                return ""
+        else: 
+            return ""
+    if direction=="down":
+        next = goDown(i, j, size)
+        if next:
+            (i, j) = next
+        else: 
+            return ""
+    if direction=="downRight":
+        next = goDown(i, j, size)
+        if next:
+            (i, j) = next
+            right = goRight(i, j, size)
+            if right: 
+                (i, j) = right
+            else:
+                return ""
         else: 
             return ""
    
     return board[i][j]
 
-def seek(board, starti, startj):
+def makeWord(board, starti, startj):
     minLen = 4
     maxLen = 4
     directions = ["upLeft", "up", "upRight",
-                  "left", "right", "downLeft", 
-                  "down", "downRight"]
+                  "left", "right", 
+                  "downLeft", "down", "downRight"]
     i = starti
     j = startj
     word = ""
     while len(word) < minLen:
         word += board[i][j]
         for d in directions:
-            goAdj(d, board, i, j)
+            goAdjacent(d, board, i, j)
     return
         
 #######
@@ -106,9 +157,13 @@ def test(size):
     i = 1
     j = 1
     print(b[i][j])
-    print(goLeft(b, i, j))
-    print(goRight(b, i, j))
-    print(goUp(b, i, j))
-    print(goDown(b, i, j))
+    print(goAdjacent("upLeft", b, i, j))
+    print(goAdjacent("up", b, i, j))
+    print(goAdjacent("upRight", b, i, j))
+    print(goAdjacent("left", b, i, j))
+    print(goAdjacent("right", b, i, j))
+    print(goAdjacent("downLeft", b, i, j))
+    print(goAdjacent("down", b, i, j))
+    print(goAdjacent("downRight", b, i, j))
 
 test(3)
