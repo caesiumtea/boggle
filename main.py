@@ -71,15 +71,15 @@ def goAdjacent(direction, board, starti, startj):
             if left: #left will be False if already at left edge
                 (i, j) = left
             else:
-                return ""
+                return False
         else: 
-            return ""
+            return False
     if direction=="up":
         next = goUp(i, j)
         if next:
             (i, j) = next
         else: 
-            return ""
+            return False
     if direction=="upRight":
         next = goUp(i, j)
         if next:
@@ -88,21 +88,21 @@ def goAdjacent(direction, board, starti, startj):
             if right: 
                 (i, j) = right
             else:
-                return ""
+                return False
         else: 
-            return ""
+            return False
     if direction=="left":
         next = goLeft(i, j)
         if next:
             (i, j) = next
         else: 
-            return ""
+            return False
     if direction=="right":
         next = goRight(i, j, size)
         if next:
             (i, j) = next
         else: 
-            return ""
+            return False
     if direction=="downLeft":
         next = goDown(i, j, size)
         if next: 
@@ -111,15 +111,15 @@ def goAdjacent(direction, board, starti, startj):
             if left: 
                 (i, j) = left
             else:
-                return ""
+                return False
         else: 
-            return ""
+            return False
     if direction=="down":
         next = goDown(i, j, size)
         if next:
             (i, j) = next
         else: 
-            return ""
+            return False
     if direction=="downRight":
         next = goDown(i, j, size)
         if next:
@@ -128,13 +128,13 @@ def goAdjacent(direction, board, starti, startj):
             if right: 
                 (i, j) = right
             else:
-                return ""
+                return False
         else: 
-            return ""
+            return False
    
-    return board[i][j]
+    return (i, j)
 
-def makeWord(board, starti, startj):
+def makeWords(board, starti, startj):
     minLen = 4
     maxLen = 4
     directions = ["upLeft", "up", "upRight",
@@ -142,12 +142,20 @@ def makeWord(board, starti, startj):
                   "downLeft", "down", "downRight"]
     i = starti
     j = startj
+    words = []
     word = ""
     while len(word) < minLen:
-        word += board[i][j]
         for d in directions:
-            goAdjacent(d, board, i, j)
-    return
+            word = board[i][j]
+            next = goAdjacent(d, board, i, j)
+            if next: #will be False if at the edge of board
+                word += next
+            # else:
+            #     continue
+
+
+
+    return words
         
 #######
 
