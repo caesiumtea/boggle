@@ -172,15 +172,30 @@ def makeWords(board, starti, startj):
         # but rn we dont have a way to get the i,j of the last letter
         # possibleWords += addToWord(word, d, board, i, j, maxLen)
     return possibleWords
+
+def naiveMakeWords(board):
+    size = len(board)
+    words = []
+    currentWord = ""
+    i = 0
+    j = 0
+    currentWord += board[i][j]
+    next = True
+    while next:
+        next = goAdjacent("right", board, i, j)
+        print(next)
+        if next:
+            i, j = next
+            currentWord += board[i][j]
+        words.append(currentWord)
+    
+    return words
         
 #######
 
 def test(size):
     b = makeBoard(size)
     printBoard(b)
-    i = 1
-    j = 1
-    print(b[i][j])
-    print(makeWords(b, 3, 3))
+    print(naiveMakeWords(b))
 
 test(5)
