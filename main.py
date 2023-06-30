@@ -173,13 +173,36 @@ def makeWords(board, starti, startj):
         # possibleWords += addToWord(word, d, board, i, j, maxLen)
     return possibleWords
 
-def naiveMakeWords(board):
+# start from the top left letter and record every word going left to right
+def naiveMakeWords1(board):
     size = len(board)
     words = []
     currentWord = ""
     i = 0
     j = 0
     currentWord += board[i][j]
+    # initialize next for the loop
+    next = True
+    while next: 
+        # next will be a tuple with indices of neighbor, unless it's already on 
+        # the edge, in which case it will return False 
+        next = goAdjacent("right", board, i, j)
+        print(next)
+        if next:
+            # update i,j only if neighbor exists
+            i, j = next
+            currentWord += board[i][j]
+        words.append(currentWord)
+    return words
+
+# start from an arbitrary letter instead
+# also fix bug where last word gets added twice
+def naiveMakeWords2(board, starti, startj):
+    size = len(board)
+    words = []
+    i = starti
+    j = startj
+    currentWord = board[i][j]
     next = True
     while next:
         next = goAdjacent("right", board, i, j)
@@ -187,15 +210,59 @@ def naiveMakeWords(board):
         if next:
             i, j = next
             currentWord += board[i][j]
-        words.append(currentWord)
-    
+            words.append(currentWord)
     return words
         
+# this time, make it repeat for every direction
+def naiveMakeWords3(board, starti, startj):
+    size = len(board)
+    directions = ["upLeft", "up", "upRight",
+                  "left", "right", 
+                  "downLeft", "down", "downRight"]
+    i = starti
+    j = startj
+    words = []
+    for d in directions:
+        print(d)
+        currentWord = board[i][j]
+        next = True
+        while next:
+            next = goAdjacent(d, board, i, j)
+            if next:
+                i, j = next
+                currentWord += board[i][j]
+                words.append(currentWord)
+        print(words)
+    return words
+
+# at this point we could call naiveMakeWords3 on every letter to get all words
+# that can be found by going in a straight line
+# how to get words that bend? use each of these words as a starting point and,
+# for each one, iterate over the directions and add the next letters in that
+# direction.
+# but overall this approach seems wrong, getting every word along a single 
+# direction... ideally we should have a function that adds just one letter
+
+# look in one direction and add the next letter to a given word
+# returns word and coordinates of where it ended
+def addLetter(word, direction, board, starti, startj):
+    i = starti
+    j = startj
+    next = goAdjacent(direction, board, i, j)
+    if next:
+        i, j = next
+        word += board[i][j]
+    return word, i, j
+
+
+
+
 #######
 
 def test(size):
     b = makeBoard(size)
     printBoard(b)
-    print(naiveMakeWords(b))
+    #print(naiveMakeWords3(b, 0, 0))
+
 
 test(5)
