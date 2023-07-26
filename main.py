@@ -254,7 +254,23 @@ def addLetter(word, direction, board, starti, startj):
         word += board[i][j]
     return word, i, j
 
+# want to try looping addLetter for each word in a list but the problem is
+# needing to know where to start looking for each word
+def extendWords(words, board):
+    directions = ["upLeft", "up", "upRight",
+                  "left", "right", 
+                  "downLeft", "down", "downRight"]
+    for word in words:
+        for d in directions:
+            addLetter(word, d, board, starti, startj)
+    return words
 
+# what if instead we stored words as a list of (i,j) tuples and then had a 
+# function to convert the list of tuples into a word based on the board?
+# the advantage is that we can use this to keep track of which letters have 
+# already been included in this word and need to be skipped, as well as always 
+# knowing where the word ends in order to know where to start when trying to 
+# extend it
 
 
 #######
